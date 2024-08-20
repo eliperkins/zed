@@ -9190,6 +9190,7 @@ impl Editor {
         else {
             return;
         };
+        let snapshot = buffer.read(cx).snapshot();
 
         let mut search_paths: Vec<PathBuf> = vec![];
 
@@ -9208,7 +9209,7 @@ impl Editor {
         let project = self.project.clone();
 
         cx.spawn(|_, mut cx| async move {
-            let result = find_file(&buffer, buffer_position, cx.clone());
+            let result = find_file(snapshot, buffer_position);
 
             if let Some((_, candidate_file_path)) = result {
                 let candidate_paths = search_paths
